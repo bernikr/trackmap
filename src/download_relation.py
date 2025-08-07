@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import geojson as gj
@@ -6,7 +7,14 @@ import shapely
 
 
 def main() -> None:
-    relation_id = input("Enter relation id: ")
+    relation_id = input("Enter relation id (or 'quit'): ")
+
+    if relation_id in {"q", "quit", "exit", "e"}:
+        sys.exit()
+
+    if not relation_id.isdigit():
+        print("invalid relation id")
+        return
 
     print("downloading relation")
     api = overpass.API()
@@ -60,4 +68,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        main()
