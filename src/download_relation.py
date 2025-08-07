@@ -5,6 +5,8 @@ import geojson as gj
 import overpass
 import shapely
 
+track_folder = Path(__file__).parent.parent / "tracks"
+
 
 def main() -> None:
     relation_id = input("Enter relation id (or 'quit'): ")
@@ -45,7 +47,7 @@ def main() -> None:
     operator = response["elements"][0]["tags"].get("operator")
     if operator:
         filename = f"{operator}/{filename}"
-    outfile = Path(f"../tracks/{filename}")
+    outfile = track_folder / filename
     outfile.parent.mkdir(parents=True, exist_ok=True)
     outfile.write_text(
         gj.dumps(
