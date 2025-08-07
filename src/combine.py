@@ -3,6 +3,7 @@ from pathlib import Path
 import geojson as gj
 
 track_folder = Path(__file__).parent.parent / "tracks"
+web_folder = Path(__file__).parent.parent / "web"
 
 
 def main() -> None:
@@ -13,7 +14,7 @@ def main() -> None:
             print(f"skipping {f}: not a feature collection")
             continue
         features.extend(geom["features"])
-    Path("../out.geojson").write_text(gj.dumps(gj.FeatureCollection(features)), encoding="utf-8")
+    (web_folder / "out.geojson").write_text(gj.dumps(gj.FeatureCollection(features)), encoding="utf-8")
 
 
 if __name__ == "__main__":
