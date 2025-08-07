@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 
@@ -6,6 +7,9 @@ import overpass
 import shapely
 
 track_folder = Path(__file__).parent.parent / "tracks"
+sorting_file = Path(__file__).parent / "sorting.json"
+
+sorting = json.loads(sorting_file.read_text(encoding="utf-8")) if sorting_file.exists() else {}
 
 
 def main() -> None:
@@ -45,9 +49,17 @@ def main() -> None:
 
     filename = f"{relation_id}-{response['elements'][0]['tags'].get('ref')}.geojson"
     tags = response["elements"][0]["tags"]
+
     operator = tags.get("operator")
     if operator:
-        filename = f"{operator}/{filename}"
+        if operator not in sorting:
+            print(f"new operator: {operator}")
+            folder = input("Enter folder name: ")
+            sorting[operator] = folder
+            sorting_file.write_text(json.dumps(sorting, indent=2), encoding="utf-8")
+        if sorting[operator]:
+            filename = f"{sorting[operator]}/{filename}"
+
     outfile = track_folder / filename
     outfile.parent.mkdir(parents=True, exist_ok=True)
     outfile.write_text(
