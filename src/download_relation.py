@@ -47,8 +47,11 @@ def main() -> None:
         msg = f"Unknown type: {type(line)}"
         raise TypeError(msg)
 
-    filename = f"{relation_id}-{response['elements'][0]['tags'].get('ref')}.geojson"
     tags = response["elements"][0]["tags"]
+    if "from" in tags or "to" in tags:
+        filename = f"{relation_id}-{tags.get('ref')}-{tags.get('from')}-{tags.get('to')}.geojson"
+    else:
+        filename = f"{relation_id}-{tags.get('ref')}-{tags.get('name')}.geojson"
 
     operator = tags.get("operator")
     if operator:
