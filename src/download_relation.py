@@ -34,7 +34,12 @@ def main() -> None:
         raise TypeError(msg)
 
     filename = f"{relation_id}-{response['elements'][0]['tags'].get('ref')}.geojson"
-    Path(f"../tracks/{filename}").write_text(
+    operator = response["elements"][0]["tags"].get("operator")
+    if operator:
+        filename = f"{operator}/{filename}"
+    outfile = Path(f"../tracks/{filename}")
+    outfile.parent.mkdir(parents=True, exist_ok=True)
+    outfile.write_text(
         gj.dumps(
             gj.FeatureCollection(
                 [
