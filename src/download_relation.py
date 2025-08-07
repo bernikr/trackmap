@@ -44,7 +44,8 @@ def main() -> None:
         raise TypeError(msg)
 
     filename = f"{relation_id}-{response['elements'][0]['tags'].get('ref')}.geojson"
-    operator = response["elements"][0]["tags"].get("operator")
+    tags = response["elements"][0]["tags"]
+    operator = tags.get("operator")
     if operator:
         filename = f"{operator}/{filename}"
     outfile = track_folder / filename
@@ -57,8 +58,7 @@ def main() -> None:
                         geometry=geom,
                         properties={
                             "id": relation_id,
-                            "type": "relation",
-                            "tags": response["elements"][0]["tags"],
+                            **tags,
                         },
                     ),
                 ],
