@@ -62,6 +62,10 @@ def main() -> None:
             sorting_file.write_text(json.dumps(sorting, indent=2), encoding="utf-8")
         if sorting[operator]:
             filename = f"{sorting[operator]}/{filename}"
+    else:
+        folder = input("Enter folder name: ")
+        if folder:
+            filename = f"{folder}/{filename}"
 
     outfile = track_folder / filename
     outfile.parent.mkdir(parents=True, exist_ok=True)
